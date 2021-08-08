@@ -18,7 +18,7 @@ export default class CustomSidebarPlugin extends Plugin {
 		this.settings.sidebarCommands.forEach(c => {
 			this.addRibbonIcon(c.icon, c.name, () => {
 				//@ts-ignore
-				this.app.commands.executeCommandById(this.command.id);
+				this.app.commands.executeCommandById(c.id);
 			});
 		})
 	}

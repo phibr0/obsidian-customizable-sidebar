@@ -20,7 +20,9 @@ export default class CustomSidebarPlugin extends Plugin {
 				//@ts-ignore
 				this.app.commands.executeCommandById(c.id);
 			});
-		})
+		});
+
+		this.addToggleCommands();
 	}
 
 	onunload() {
@@ -33,5 +35,21 @@ export default class CustomSidebarPlugin extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
+	}
+
+	addToggleCommands(){
+		this.addCommand({
+			id: "theme-toggle",
+			name: "Toggle Dark/Light Mode",
+			icon: "",
+			callback: () => {
+				//@ts-ignore
+				this.app.getTheme() === "obsidian"
+				//@ts-ignore
+				? this.app.commands.executeCommandById("theme:use-light")
+				//@ts-ignore
+				: this.app.commands.executeCommandById("theme:use-dark");
+			}
+		});
 	}
 }

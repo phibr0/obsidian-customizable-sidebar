@@ -25,3 +25,10 @@ a[href="https://www.buymeacoffee.com/phibr0"] > img {
 a[href="https://www.buymeacoffee.com/phibr0"]{
     transform: translate(0, 5%);
 }
+
+/* .CS-ribbon-visible .workspace-drawer.mod-left {
+    display: flex !important;
+    min-width: auto;
+    width: var(--workspace-drawer-ribbon-width) !important;
+    margin-top: 50px;
+} */

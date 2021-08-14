@@ -22,7 +22,7 @@ export default class CustomSidebarPlugin extends Plugin {
 			});
 		});
 
-		this.addToggleCommands();
+		this.addExtraCommands();
 	}
 
 	onunload() {
@@ -37,11 +37,12 @@ export default class CustomSidebarPlugin extends Plugin {
 		await this.saveData(this.settings);
 	}
 
-	addToggleCommands(){
+	addExtraCommands(){
 		this.addCommand({
 			id: "theme-toggle",
 			name: "Toggle Dark/Light Mode",
-			icon: "",
+			//@ts-ignore
+			icon: "feather-eye",
 			callback: () => {
 				//@ts-ignore
 				this.app.getTheme() === "obsidian"

@@ -52,5 +52,57 @@ export default class CustomSidebarPlugin extends Plugin {
 				: this.app.commands.executeCommandById("theme:use-dark");
 			}
 		});
+
+		this.addCommand({
+			id: "close-left-sidebar",
+			name: "Close left Sidebar",
+			icon: "feather-minimize",
+			callback: () => {
+				//@ts-ignore
+				if(!this.app.workspace.leftRibbon.containerEl.hasClass("is-collapsed")){
+					//@ts-ignore
+					this.app.workspace.leftRibbon.collapseButtonEl.click();
+				}
+			}
+		});
+
+		this.addCommand({
+			id: "open-left-sidebar",
+			name: "Open left Sidebar",
+			icon: "feather-maximize",
+			callback: () => {
+				//@ts-ignore
+				if(this.app.workspace.leftRibbon.containerEl.hasClass("is-collapsed")){
+					//@ts-ignore
+					this.app.workspace.leftRibbon.collapseButtonEl.click();
+				}
+			}
+		});
+
+		this.addCommand({
+			id: "close-right-sidebar",
+			name: "Close right Sidebar",
+			icon: "feather-minimize",
+			callback: () => {
+				//@ts-ignore
+				if(!this.app.workspace.rightRibbon.containerEl.hasClass("is-collapsed")){
+					//@ts-ignore
+					this.app.workspace.rightRibbon.collapseButtonEl.click();
+				}
+			}
+		});
+
+		this.addCommand({
+			id: "open-right-sidebar",
+			name: "Open right Sidebar",
+			icon: "feather-maximize",
+			callback: () => {
+				//@ts-ignore
+				if(this.app.workspace.rightRibbon.containerEl.hasClass("is-collapsed")){
+					//@ts-ignore
+					this.app.workspace.rightRibbon.collapseButtonEl.click();
+				}
+			}
+		});
 	}
 }

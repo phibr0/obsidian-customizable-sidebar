@@ -4,10 +4,12 @@ import CommandSuggester from "./commandSuggester";
 
 export interface CustomSidebarSettings {
     sidebarCommands: Command[];
+    hiddenCommands: string[];
 }
 
 export const DEFAULT_SETTINGS: CustomSidebarSettings = {
     sidebarCommands: [],
+    hiddenCommands: [],
 }
 
 export default class CustomSidebarSettingsTab extends PluginSettingTab {
@@ -54,7 +56,30 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
                 });
             setting.nameEl.prepend(iconDiv);
             setting.nameEl.addClass("CS-flex");
-        })
+        });
+
+        //@ts-ignore
+        const children: HTMLCollection = this.app.workspace.leftRibbon.ribbonActionsEl.children;
+        for (let i = 0; i < children.length; i++) {
+            if (!this.plugin.settings.sidebarCommands.contains(this.plugin.settings.sidebarCommands.find(c => c.name === (children.item(i) as HTMLElement).getAttribute("aria-label")))) {
+                new Setting(containerEl)
+                    .setName("Hide " + (children.item(i) as HTMLElement).getAttribute("aria-label") + "?")
+                    .addToggle(cb => {
+                        cb.setValue((children.item(i) as HTMLElement).style.display === "none")
+                        cb.onChange(async value => {
+                            if(value === true) {
+                                (children.item(i) as HTMLElement).style.display = "none";
+                                this.plugin.settings.hiddenCommands.push((children.item(i) as HTMLElement).getAttribute("aria-label"));
+                                await this.plugin.saveSettings();
+                            } else {
+                                (children.item(i) as HTMLElement).style.display = "flex";
+                                this.plugin.settings.hiddenCommands.remove((children.item(i) as HTMLElement).getAttribute("aria-label"));
+                                await this.plugin.saveSettings();
+                            }
+                        });
+                    });
+            }
+        }
 
         new Setting(containerEl)
             .setName('Donate')
@@ -63,6 +88,7 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
             .addButton((bt) => {
                 bt.buttonEl.outerHTML = `<a href="https://www.buymeacoffee.com/phibr0"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phibr0&button_colour=5F7FFF&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00"></a>`;
             });
+
     }
 }
 

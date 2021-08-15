@@ -23,6 +23,8 @@ export default class CustomSidebarPlugin extends Plugin {
 		});
 
 		this.addExtraCommands();
+
+		this.app.workspace.onLayoutReady(() => this.hideCommands());
 	}
 
 	onunload() {
@@ -104,5 +106,15 @@ export default class CustomSidebarPlugin extends Plugin {
 				}
 			}
 		});
+	}
+
+	hideCommands() {
+		//@ts-ignore
+        const children: HTMLCollection = this.app.workspace.leftRibbon.ribbonActionsEl.children;
+		for (let i = 0; i < children.length; i++) {
+			if(this.settings.hiddenCommands.contains(children.item(i).getAttribute("aria-label"))) {
+				(children.item(i) as HTMLElement).style.display = "none";
+			}
+		}
 	}
 }

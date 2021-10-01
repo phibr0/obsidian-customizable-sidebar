@@ -1,6 +1,7 @@
 import { PluginSettingTab, App, Setting, setIcon, Command, Notice } from "obsidian";
 import CustomSidebarPlugin from "src/main";
 import CommandSuggester from "./commandSuggester";
+import IconPicker from "./iconPicker";
 
 export interface CustomSidebarSettings {
     sidebarCommands: Command[];
@@ -32,7 +33,7 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName("Add Command to Sidebar")
-            .setDesc("Add a new Command to the left Sidebar Ribbon")
+            .setDesc("Add a new command to the left Sidebar Ribbon")
             .addButton((bt) => {
                 bt.setButtonText("Add Command")
                     .onClick(() => {
@@ -45,13 +46,21 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
             setIcon(iconDiv, c.icon, 20);
             const setting = new Setting(containerEl)
                 .setName(c.name)
-                .addButton(bt => {
-                    bt.setButtonText("Remove Command")
+                .addExtraButton(bt => {
+                    bt.setIcon("trash")
+                        .setTooltip("Remove Command")
                         .onClick(async () => {
                             this.plugin.settings.sidebarCommands.remove(c);
                             await this.plugin.saveSettings();
                             this.display();
-                            new Notice("You will need to restart Obsidian for the Command to dissapear.")
+                            new Notice("You will need to restart Obsidian for the command to disappear.")
+                        })
+                })
+                .addExtraButton(bt => {
+                    bt.setIcon("gear")
+                        .setTooltip("Edit Icon")
+                        .onClick(() => {
+                            new IconPicker(this.plugin, c, true).open();
                         })
                 });
             setting.nameEl.prepend(iconDiv);
@@ -83,7 +92,7 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
 
         new Setting(containerEl)
             .setName('Donate')
-            .setDesc('If you like this Plugin, consider donating to support continued development:')
+            .setDesc('If you like this plugin, consider donating to support continued development:')
             .setClass("AT-extra")
             .addButton((bt) => {
                 bt.buttonEl.outerHTML = `<a href="https://www.buymeacoffee.com/phibr0"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=phibr0&button_colour=5F7FFF&font_colour=ffffff&font_family=Inter&outline_colour=000000&coffee_colour=FFDD00"></a>`;

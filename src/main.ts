@@ -106,6 +106,25 @@ export default class CustomSidebarPlugin extends Plugin {
 				}
 			}
 		});
+
+		this.addCommand({
+			id: "toggle-left-sidebar",
+			name: "Toggle left Sidebar",
+			icon: "feather-minimize",
+			callback: () => {
+				//@ts-ignore
+				this.app.workspace.leftRibbon.collapseButtonEl.click();
+			}
+		});
+
+		this.addCommand({
+			id: "toggle-right-sidebar",
+			name: "Toggle right Sidebar",
+			icon: "feather-minimize",
+			callback: () => {
+				this.app.workspace.rightRibbon.collapseButtonEl.click();
+			}
+		});		
 	}
 
 	hideCommands() {

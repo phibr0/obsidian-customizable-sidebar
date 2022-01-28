@@ -41,11 +41,27 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
                     });
             });
 
-        this.plugin.settings.sidebarCommands.forEach(c => {
+        this.plugin.settings.sidebarCommands.forEach((c, index) => {
             const iconDiv = createDiv({ cls: "CS-settings-icon" });
             setIcon(iconDiv, c.icon, 20);
             const setting = new Setting(containerEl)
-                .setName(c.name)
+                .setName(c.name);
+
+            if (index > 0) {
+                setting.addExtraButton(bt => {
+                    bt.setIcon("up-arrow-with-tail")
+                        .setTooltip("Move up")
+                        .onClick(async () => await this.moveCommand(c, 'up'));
+                })
+            }
+            if (index < this.plugin.settings.sidebarCommands.length - 1) {
+                setting.addExtraButton(bt => {
+                    bt.setIcon("down-arrow-with-tail")
+                        .setTooltip("Move down")
+                        .onClick(async () => await this.moveCommand(c, 'down'));
+                })
+            }
+            setting
                 .addExtraButton(bt => {
                     bt.setIcon("trash")
                         .setTooltip("Remove Command")
@@ -53,7 +69,9 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
                             this.plugin.settings.sidebarCommands.remove(c);
                             await this.plugin.saveSettings();
                             this.display();
-                            new Notice("You will need to restart Obsidian for the command to disappear.")
+                            const ribbonButton = Array.from(this.leftRibbonPanel.children)
+                                .find((btn) => c.name === btn.getAttribute('aria-label'))
+                            this.leftRibbonPanel.removeChild(ribbonButton);
                         })
                 })
                 .addExtraButton(bt => {
@@ -99,7 +117,31 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
             });
 
     }
+
+    private get leftRibbonPanel(): HTMLElement {
+        // @ts-ignore `ribbonActionsEl` is not defined in api
+        return this.app.workspace.leftRibbon.ribbonActionsEl as HTMLElement;
+    }
+
+    private async moveCommand(command: Command, direction: 'up' | 'down') {
+        // Move command in settings
+        const commands = this.plugin.settings.sidebarCommands;
+        const index = commands.indexOf(command);
+        if (direction === 'up') {
+            commands.splice(index - 1, 0, commands.splice(index, 1)[0]);
+        } else {
+            commands.splice(index + 1, 0, commands.splice(index, 1)[0]);
+        }
+        await this.plugin.saveSettings();
+        this.display();
+
+        // Move command button in left ribbon
+        const ribbonButton = Array.from(this.leftRibbonPanel.children)
+            .find((btn) => command.name === btn.getAttribute('aria-label'));
+        if (direction === 'up') {
+            ribbonButton.previousSibling.before(ribbonButton);
+        } else {
+            ribbonButton.nextSibling.after(ribbonButton);
+        }
+    }
 }
-
-
-

@@ -53,7 +53,9 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
                             this.plugin.settings.sidebarCommands.remove(c);
                             await this.plugin.saveSettings();
                             this.display();
-                            new Notice("You will need to restart Obsidian for the command to disappear.")
+                            const ribbonButton = Array.from(this.leftRibbonPanel.children)
+                                .find((btn) => c.name === btn.getAttribute('aria-label'))
+                            this.leftRibbonPanel.removeChild(ribbonButton);
                         })
                 })
                 .addExtraButton(bt => {
@@ -99,7 +101,9 @@ export default class CustomSidebarSettingsTab extends PluginSettingTab {
             });
 
     }
+
+    private get leftRibbonPanel(): HTMLElement {
+        // @ts-ignore `ribbonActionsEl` is not defined in api
+        return this.app.workspace.leftRibbon.ribbonActionsEl as HTMLElement;
+    }
 }
-
-
-

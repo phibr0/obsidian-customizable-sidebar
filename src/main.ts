@@ -1,4 +1,4 @@
-import { Plugin, setIcon } from 'obsidian';
+import { Platform, Plugin, setIcon } from 'obsidian';
 import { addFeatherIcons } from './ui/icons';
 import CustomSidebarSettingsTab, { CustomSidebarSettings, DEFAULT_SETTINGS } from './ui/settingsTab';
 
@@ -128,6 +128,10 @@ export default class CustomSidebarPlugin extends Plugin {
 	}
 
 	sidebarPins() {
+		if ( Platform.isMobile) {
+			// don't do any of this if we're on mobile
+			return;
+		}
 		if (this.settings.pinSidebar === undefined && this.pinSidebarSupport) {
 			// clean up any sidebar pins & related classes if present
 

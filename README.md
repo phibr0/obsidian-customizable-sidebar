@@ -1,3 +1,5 @@
+# This Plugin is now archived. [Commander](https://github.com/phibr0/obsidian-commander) is it's successor!
+
 # Obsidian Customizable Sidebar Plugin [![GitHub tag (Latest by date)](https://img.shields.io/github/v/tag/phibr0/obsidian-customizable-sidebar)](https://github.com/phibr0/obsidian-customizable-sidebar/releases) ![GitHub all releases](https://img.shields.io/github/downloads/phibr0/obsidian-customizable-sidebar/total)
 
 This plugin allows you to add any command, including those of plugins, to the sidebar and assign custom icons to them.
